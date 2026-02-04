@@ -37,7 +37,7 @@ if __name__ == "__main__":
     all_df_picklefile = "all_galaxies_all_params_redshift_bins_df.pickle"
     sfr_timescales    = [10, 100] #units: Myr
     disk_types        = ["INNER_DISK", "OUTER_DISK"]
-    savepath          = "~/SYMR_FIRE2_GIT/RUN_XGB_SHAP_PYSR_ZBINS_QUANTILE_LOSS/"
+    savepath          = "/mnt/home/dsalim/SYMR_FIRE2_GIT/RUN_XGB_SHAP_PYSR_ZBINS_QUANTILE_LOSS/"
     n_epochs_old      = 0
     n_epochs          = 4000
     n_saves           = 8

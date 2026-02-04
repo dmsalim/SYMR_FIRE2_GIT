@@ -33,7 +33,7 @@ class Cfile:
         if endfile:
             self.file.close()
 
-def write_sh_script(z_str, xgb_picklefile, sfr_type, redshift_index=None, pixel_width=750, n_epochs=10000, n_saves=5, disk_type=None, input_df_picklefile=None, savepath="~/SYMR_FIRE2_GIT/RUN_XGB_SHAP_PYSR_ZBINS/"):
+def write_sh_script(z_str, xgb_picklefile, sfr_type, redshift_index=None, pixel_width=750, n_epochs=10000, n_saves=5, disk_type=None, input_df_picklefile=None, savepath="/mnt/home/dsalim/SYMR_FIRE2_GIT/RUN_XGB_SHAP_PYSR_ZBINS/"):
     sh_directory  = savepath + "SH_SCRIPTS/"
     if disk_type != None:
         exp_directory = savepath + z_str[1:] + "/" + disk_type + "/"
@@ -65,7 +65,7 @@ def write_sh_script(z_str, xgb_picklefile, sfr_type, redshift_index=None, pixel_
     fid.wl("module load python3")
     fid.wl("module load julia")
     fid.wl("source ~/symr_sf_venv/bin/activate")
-    fid.wl("cd ~/SYMR_FIRE2_GIT/")
+    fid.wl("cd /mnt/home/dsalim/SYMR_FIRE2_GIT/")
 
     fid.wl('python run_pysr_ALL_FEATS.py' + ' --input_df_picklefile =' + '\"' + str(input_df_picklefile) + '\"'
                                           + ' --xgb_picklefile='       + '\"' + xgb_picklefile + '\"' 
@@ -288,7 +288,7 @@ if __name__ == "__main__":
     all_df_picklefile = "all_galaxies_all_params_redshift_bins_df.pickle"
     sfr_timescales    = [10, 100] #units: Myr
     disk_types        = ["INNER_DISK", "OUTER_DISK"]
-    savepath          = "~/SYMR_FIRE2_GIT/RUN_XGB_SHAP_PYSR_ZBINS/"
+    savepath          = "/mnt/home/dsalim/SYMR_FIRE2_GIT/RUN_XGB_SHAP_PYSR_ZBINS/"
     n_epochs_old      = 0
     n_epochs          = 10000
     n_saves           = 5
