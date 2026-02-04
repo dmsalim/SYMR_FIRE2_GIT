@@ -17,7 +17,8 @@ from astropy.constants import G
 from sklearn.model_selection import train_test_split
 import random
 import argparse
-from xgb_shap_pysr_functions import *
+from functions_run_xgb_shap import *
+from functions_run_pysr import *
 from xgb_shap_ALL_FEATS import *
 #from shaphypetune import BoostRFE, BoostBoruta
 

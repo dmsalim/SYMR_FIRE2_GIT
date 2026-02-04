@@ -31,7 +31,8 @@ from matplotlib.colors import ListedColormap
 from itertools import starmap
 from sympy import simplify, sympify, symbols, latex
 from latex2sympy2 import latex2sympy
-from xgb_shap_pysr_functions import *
+from functions_run_xgb_shap import *
+from functions_run_pysr import *
 
 if __name__ == "__main__":
     ####### READ IN DATA FILE #######
