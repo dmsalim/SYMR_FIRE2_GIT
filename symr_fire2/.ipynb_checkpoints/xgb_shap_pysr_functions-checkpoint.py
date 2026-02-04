@@ -1181,5 +1181,5 @@ def found_eqns_analysis_plots(eqns_save_obj, X_train, X_test, y_train, y_test, s
 #### ---------- CALL MAIN FUNCTION ---------- ####
 #### ======================================== ####
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
 
