@@ -1,0 +1,13 @@
+pyproject.toml
+setup.py
+symr.egg-info/PKG-INFO
+symr.egg-info/SOURCES.txt
+symr.egg-info/dependency_links.txt
+symr.egg-info/top_level.txt
+symr_fire2/__init__.py
+symr_fire2/found_eqns_analysis.py
+symr_fire2/run_pysr_ALL_FEATS.py
+symr_fire2/run_synthetic_FG13.py
+symr_fire2/xgb_shap_ALL_FEATS.py
+symr_fire2/xgb_shap_ALL_FEATS_ALLZ.py
+symr_fire2/xgb_shap_pysr_functions.py

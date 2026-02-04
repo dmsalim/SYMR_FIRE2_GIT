@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="symr",  # module/package name
+    name="symr_fire2",  # module/package name
     version="0.1.0",
     packages=find_packages(),
     install_requires=[
