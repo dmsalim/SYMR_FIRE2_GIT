@@ -15,8 +15,8 @@ from pysr import PySRRegressor
 from sklearn.model_selection import train_test_split
 import random
 import argparse
-from functions_run_xgb_shap import *
-from functions_run_pysr import *
+from symr_fire2.functions_run_xgb_shap import *
+from symr_fire2.functions_run_pysr import *
 #from shaphypetune import BoostRFE, BoostBoruta
 
 #### ================================================= ####
@@ -82,7 +82,7 @@ def write_sh_script(z_str, xgb_picklefile, sfr_type, redshift_index=None, pixel_
 #### ==========================================================================####
 
 def make_data_redshift_bin(galmap_mdir       = "/mnt/home/morr/ceph/analysis/sfr/galmap/",
-                           redshift_txt      = "/mnt/home/chayward/firesims/fire2/public_release/core/snapshot_times_public.txt",
+                           redshift_txt      = "/mnt/home/firesims/public_binder/fire2/fire2/public_release/core/snapshot_times_public.txt",
                            redshift_bins     = [0, 0.5, 1.0, 2.0],
                            pixel_width       = 750,
                            all_df_picklefile = "all_galaxies_all_params_redshift_bins_df.pickle",

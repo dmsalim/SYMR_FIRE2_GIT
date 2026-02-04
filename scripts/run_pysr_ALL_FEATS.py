@@ -15,8 +15,8 @@ from pysr import PySRRegressor
 from sklearn.model_selection import train_test_split
 import random
 import argparse
-from functions_run_xgb_shap import *
-from functions_run_pysr import *
+from symr_fire2.functions_run_xgb_shap import *
+from symr_fire2.functions_run_pysr import *
 #### ================================================== ####
 #### ---------- GET ARGUMENTS FOR EXPERIMENT ---------- ####
 #### ================================================== ####

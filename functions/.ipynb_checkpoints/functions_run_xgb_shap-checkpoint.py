@@ -1,9 +1,7 @@
 import numpy as np
 from pysr import PySRRegressor, jl
 #from numpy.lib.function_base import percentile
-import h5py
 import os.path
-import glob 
 import matplotlib.pyplot as plt 
 import matplotlib as mpl
 import matplotlib.colors as mcolors
@@ -21,7 +19,6 @@ from numpy import linspace, meshgrid
 from scipy.optimize import curve_fit
 from scipy.special import erf
 from scipy.stats import gaussian_kde
-import pdb 
 import pickle
 from astropy import units as u, constants as const
 from astropy.table import QTable
@@ -312,11 +309,7 @@ def make_shap_plot(X, y, test_feature_name="\\log~Sigma_mol", picklefile="XBG_mo
     [X_train_c, X_test_c, y_train_c, y_test_c, model_XBGcla, shap_values_cla] = xbg_save_object[1]
 
     ######## FIND SHAP VALUES #############
-    #f_shap, ax_shap = plt.subplots(1, 3, figsize=(30, 8))
     f_shap  = plt.figure(figsize=(9,9))#, constrained_layout=True)
-    
-    #gs_whole       = GridSpec(2, 2, left=0.25, figure=f_shap)
-    #gs_shap_c      = GridSpecFromSubplotSpec(1, 1, subplot_spec=gs_whole[0,0])
 
     [left, right, space]   = [0.25, 0.95, 0.2]
     gs_shap_c      = GridSpec(nrows=1, ncols=1, left=left, right=(left + (right-left)/2 - space/2), bottom=0.5)#, hspace=0.3)
@@ -324,7 +317,6 @@ def make_shap_plot(X, y, test_feature_name="\\log~Sigma_mol", picklefile="XBG_mo
     ax_shap_c.set_title("CLASSIFICATION")    
     ax_shap_c.tick_params(axis='both', labelsize=5)
 
-    #gs_shap_r      = GridSpecFromSubplotSpec(1, 1, subplot_spec=gs_whole[0,1])
     gs_shap_r      = GridSpec(nrows=1, ncols=1, left=(right - (right-left)/2 + space/2), right=right, bottom=0.5)
     ax_shap_r      = f_shap.add_subplot(gs_shap_r[0]) 
     ax_shap_r.set_title("REGRESSION")   
@@ -332,7 +324,6 @@ def make_shap_plot(X, y, test_feature_name="\\log~Sigma_mol", picklefile="XBG_mo
 
     gs_sfr  = GridSpec(nrows=1, ncols=2, left=left, right=right, bottom=0.1, top=0.4, hspace=0.001)
     ax_sfr  = f_shap.add_subplot(gs_sfr[0]) 
-    #gs_sfr         = GridSpecFromSubplotSpec(1, 2, subplot_spec=gs_whole[1,:])    
 
     y_XBGreg    = model_XBGreg.predict(X_test)
     y_test_np   = np.squeeze(np.array(y_test))
@@ -340,7 +331,6 @@ def make_shap_plot(X, y, test_feature_name="\\log~Sigma_mol", picklefile="XBG_mo
     make_math_FUNC = lambda x: f"${x.replace('synthetic', 'noise')}$"   
 
     y_label     = make_math_FUNC((y_test.keys())[0])
-    #y_label = y.keys()[0] #temporary fix
    
 
     replace_FUNC      = lambda s: s.replace("synthetic", "noise")
@@ -350,16 +340,13 @@ def make_shap_plot(X, y, test_feature_name="\\log~Sigma_mol", picklefile="XBG_mo
     plt.sca(ax_shap_c)
     #comment back in for proper column name in latex math mode
     shap_summary_fig = shap.summary_plot(shap_values_cla, X_test_c.rename(columns=make_math_FUNC), plot_size=None, show=False, color_bar=False)
-    #shap_summary_fig = shap.summary_plot(shap_values_cla, X_test_c, plot_size=None, show=False, color_bar=False)
     ax_shap_c        = plt.gcf()
  
     plt.sca(ax_shap_r)
     shap_summary_fig = shap.summary_plot(shap_values_reg, X_test.rename(columns=make_math_FUNC), plot_size=None, show=False, color_bar=False)
     ax_shap_r = plt.gcf()
-    #sfr_comparison_plots(f_shap, gs_sfr, y_test_np, y_XBGreg, y_label, model_name="XGBoost", log=log)
     test_feature_values = X_test[test_feature_name]
     
-    #pdb.set_trace()
     sfr_comparison_plots(ax_sfr, y_test_np, y_XBGreg, y_label, test_feature_values, model_name="XGBoost", log=log)
 
     f_shap.savefig(pdf_savefile, bbox_inches='tight')

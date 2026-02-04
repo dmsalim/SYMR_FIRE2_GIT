@@ -1,9 +1,5 @@
 import numpy as np
 from pysr import PySRRegressor, jl
-#from numpy.lib.function_base import percentile
-import h5py
-import os.path
-import glob 
 import matplotlib.pyplot as plt 
 import matplotlib as mpl
 import matplotlib.colors as mcolors
@@ -21,7 +17,6 @@ from numpy import linspace, meshgrid
 from scipy.optimize import curve_fit
 from scipy.special import erf
 from scipy.stats import gaussian_kde
-import pdb 
 import pickle
 from astropy import units as u, constants as const
 from astropy.table import QTable
@@ -353,10 +348,7 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
         # ---- x axes and legend ---- #
         if  (n==1) or (n == len(metrics_standards)-1): 
             ax_metric.set_xlabel("Equation Complexity")
-            #if is_right==False:
-            #    ax_metric.legend(loc="lower right", fontsize='small')
-        #if n==2:
-        #    pdb.set_trace()
+
         if (n==0) or (n==1):
             r2_axes.append(ax_metric)
      
@@ -465,10 +457,8 @@ def eqn_behaviour(ax, equation, X_test, test_feature="\log\Sigma_{\mathrm{gas}}"
         else:
             plot_test_feature = test_feature_array
         
-        #y_prediction       = np.array(list(map(lambda i: sympify_func.subs(x, i), plot_test_feature.tolist()))).real.astype("float")
         y_prediction       = np.array(list(map(lambda i: sympify_func.subs(x, i), plot_test_feature.tolist()))).real
-        #print(y_prediction)
-        #pdb.set_trace()
+
         if comp_obj_colour == None:
             comp_obj_colour   = galaxy_type_col[i]
         if theory_line_label == None:
