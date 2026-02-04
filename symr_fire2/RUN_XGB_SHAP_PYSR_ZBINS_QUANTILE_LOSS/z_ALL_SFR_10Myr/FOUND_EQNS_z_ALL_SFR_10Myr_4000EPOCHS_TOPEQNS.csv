@@ -1,0 +1,5 @@
+,complexity,model_orig_index,loss,score,equation,latex equation
+0,12.0,8,0.2755522,0.011338878354351113,(exp(x7) ^ -0.4034693) + (-4.975588 + (x0 ^ 1.5248524)),\log \Sigma_{\mathrm{gas}}^{1.52} + \left(e^{\log f_{\mathrm{gas}}}\right)^{-0.4} - 4.98
+1,15.0,10,0.27516162,0.0014050225321611343,-0.14260468 + ((((exp(x4) ^ 0.4896022) + exp(x0)) ^ 0.6403928) + -5.1860533),\left(e^{\log \Sigma_{\mathrm{gas}}} + \left(e^{\log \Sigma_{*}}\right)^{0.49}\right)^{0.64} - 5.33
+2,16.0,11,0.27362695,0.005592951764694882,log10(x3) + ((-5.1860533 + (exp(x4) ^ 0.23384365)) + (x0 ^ 1.2592121)),"\log \Sigma_{\mathrm{gas}}^{1.26} + \left(e^{\log \Sigma_{*}}\right)^{0.23} + \frac{\log{\left(\log \sigma_{\mathrm{gas},z} \right)}}{\log{\left(10 \right)}} - 5.19"
+3,17.0,12,0.2706341,0.010997958301964813,((exp((x4 + x3) ^ 1.2451187) ^ 0.118609734) + -5.2117577) + (x0 ^ 1.2899481),"\log \Sigma_{\mathrm{gas}}^{1.29} + \left(e^{\left(\log \sigma_{\mathrm{gas},z} + \log \Sigma_{*}\right)^{1.25}}\right)^{0.12} - 5.21"

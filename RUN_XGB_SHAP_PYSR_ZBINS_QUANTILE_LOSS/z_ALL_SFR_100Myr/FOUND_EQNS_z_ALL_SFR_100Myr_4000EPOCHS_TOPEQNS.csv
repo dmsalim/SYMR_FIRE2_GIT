@@ -1,5 +1,0 @@
-,complexity,model_orig_index,loss,score,equation,latex equation
-0,12.0,7,0.27058598,0.03431422872119418,(x0 + -6.123284) + ((x4 + x3) ^ 0.8645286),"\log \Sigma_{\mathrm{gas}} + \left(\log \sigma_{\mathrm{gas},z} + \log \Sigma_{*}\right)^{0.86} - 6.12"
-1,14.0,8,0.2686348,0.003618533610858523,((x0 + -5.5576744) + ((x3 + x4) ^ 0.84897494)) + -0.5213713,"\log \Sigma_{\mathrm{gas}} + \left(\log \sigma_{\mathrm{gas},z} + \log \Sigma_{*}\right)^{0.85} - 6.08"
-2,16.0,9,0.26777655,0.0015999861530904195,-0.50486255 + ((((x4 + (x3 ^ 0.9007966)) ^ 0.86024857) + -5.5576744) + x0),"\log \Sigma_{\mathrm{gas}} + \left(\log \sigma_{\mathrm{gas},z}^{0.9} + \log \Sigma_{*}\right)^{0.86} - 6.06"
-3,18.0,10,0.2674348,0.0006385328832182113,-0.50486255 + (((x0 ^ 0.9645995) + -5.5576744) + (((x3 ^ 0.9132306) + x4) ^ 0.86024857)),"\log \Sigma_{\mathrm{gas}}^{0.96} + \left(\log \sigma_{\mathrm{gas},z}^{0.91} + \log \Sigma_{*}\right)^{0.86} - 6.06"

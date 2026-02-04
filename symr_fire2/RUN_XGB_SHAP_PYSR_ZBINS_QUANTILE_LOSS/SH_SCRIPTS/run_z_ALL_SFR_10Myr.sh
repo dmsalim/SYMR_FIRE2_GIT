@@ -1,0 +1,17 @@
+#!/bin/bash
+#SBATCH --job-name=run_z_ALL_SFR_10Myr
+#SBATCH -c 64
+#SBATCH -n 1
+#SBATCH --mem=750000          # total memory per node in MB (see also --mem-per-cpu)
+#SBATCH -t 10080              # Runtime in minutes, 10080=7days
+#SBATCH -o ~/SYMR_FIRE2_GIT/RUN_XGB_SHAP_PYSR_ZBINS_QUANTILE_LOSS/SH_SCRIPTS/run_z_ALL_SFR_10Myr.out # Standard out goes to this file
+#SBATCH -e ~/SYMR_FIRE2_GIT/RUN_XGB_SHAP_PYSR_ZBINS_QUANTILE_LOSS/SH_SCRIPTS/run_z_ALL_SFR_10Myr.err # Standard err goes to this filehostname
+#SBATCH --mail-type=ALL       # Type of email notification- BEGIN,END,FAIL,ALL
+#SBATCH --mail-user=diane.m.salim@gmail.com
+module load slurm
+module load gcc/11
+module load python3
+module load julia
+source ~/symr_sf_venv/bin/activate
+cd ~/SYMR_FIRE2_GIT/
+python run_pysr_ALL_FEATS.py --input_df_picklefile ="None" --xgb_picklefile="~/SYMR_FIRE2_GIT/RUN_XGB_SHAP_PYSR_ZBINS_QUANTILE_LOSS/z_ALL_SFR_10Myr/m11_xgb_shap_z_ALL_SFR_10Myr.pickle" --sfr_type=10 --redshift_index=None --pixel_width=750 --epochs=4000 --n_saves_train=8 --savepath="~/SYMR_FIRE2_GIT/RUN_XGB_SHAP_PYSR_ZBINS_QUANTILE_LOSS/z_ALL_SFR_10Myr/"
