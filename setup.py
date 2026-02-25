@@ -3,7 +3,8 @@ from setuptools import setup, find_packages
 setup(
     name="symr_fire2",          # This is the package name for pip
     version="0.1.0",
-    packages={"symr_fire2": "functions"},  # <- map 'symr' module to 'functions' folder
+    packages=["symr_fire2"]
+    package_dir={"symr_fire2": "functions"},  # <- map 'symr' module to 'functions' folder
     install_requires=[
         "numpy",
         "pandas",

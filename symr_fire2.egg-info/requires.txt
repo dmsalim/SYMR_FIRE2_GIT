@@ -1,0 +1,15 @@
+numpy
+pandas
+pysr
+matplotlib
+seaborn
+sympy
+functools
+xgboost
+sklearn
+shap
+scipy
+pickle
+astropy
+itertools
+latex2sympy2
