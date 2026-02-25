@@ -52,7 +52,7 @@ def save_into_final_loss_df(full_losses_epoch, MSE_losses_epoch, df_losses_all_e
     df_losses_all_eqns_all_epochs = pd.concat([df_losses_all_eqns_all_epochs, df_losses_this_epoch], ignore_index=True)
     return df_losses_all_eqns_all_epochs
 
-def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units=None, n_epochs=10, n_saves=1, sfr_type=10, min_loss_sfr_laws=2, eqns_picklefile="FOUND_EQNS.pickle", eqns_picklefile_old=None):
+def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units=None, n_epochs=10, n_saves=1, eqns_picklefile="FOUND_EQNS.pickle", eqns_picklefile_old=None):
 
     default_files_path = "/SH_SCRIPTS/DEFAULT_FILES"
     folder_indices     = [i for i, x in enumerate(eqns_picklefile) if x == "/"]
@@ -73,10 +73,6 @@ def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units
         n_epochs_old = int(eqns_picklefile_old[n_index+1 : eqns_picklefile_old.find("EPOCHS")]) 
         n_iterations = n_epochs - n_epochs_old
     else:
-        #if (X_units!=None):
-        #    dimensional_constraint_penalty=10**5
-        #else: 
-        #    dimensional_constraint_penalty=1000
         df_train_losses_all_eqns_all_epochs = pd.DataFrame()
         df_test_losses_all_eqns_all_epochs  = pd.DataFrame()
         n_epochs_old           = 0
@@ -85,7 +81,6 @@ def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units
             model_selection                = "best",
             niterations                    = 2,    #1,--> there's something that happens between iterations 
             populations                    = 128,  #40,  #running on 128 --> populations = 2*n_cores
-            #dimensional_constraint_penalty = dimensional_constraint_penalty,
             ncycles_per_iteration          = 5000, # makes epochs longer but more efficiently using cores
             binary_operators               = ["plus", "pow", "mult"], 
             constraints                    = {"pow": (-1, 1), 'mult':(1, 1)},
@@ -159,7 +154,6 @@ def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units
             with open(this_epoch_pkl, "wb") as f:
                 pickle.dump(eqns_save_object, f)
             print("FINISHED PICKLING " + this_epoch_pkl) 
-            #found_eqns_analysis_plots(eqns_save_object, X_train, X_test, y_train, y_test, sfr_type=sfr_type, max_loss=min_loss_sfr_laws, savefile = savefile) 
         print("INTERATION " + str(k))
         print("TRAINING LOSSES:")
         print(df_train_losses_all_eqns_all_epochs["FULL_CUSTOM_LOSS"])
@@ -170,7 +164,6 @@ def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units
     eqns_save_object = (model, df_train_losses_all_eqns_all_epochs, df_test_losses_all_eqns_all_epochs)
     with open(eqns_picklefile, "wb") as f:
         pickle.dump(eqns_save_object, f)
-    #found_eqns_analysis_plots(eqns_save_object, X_train, X_test, y_train, y_test, sfr_type=sfr_type, max_loss=min_loss_sfr_laws, savefile = savefile) 
     print("FINISHED PICKLING " + eqns_picklefile)
     return eqns_save_object
 

@@ -13,14 +13,11 @@ Requires-Dist: pysr
 Requires-Dist: matplotlib
 Requires-Dist: seaborn
 Requires-Dist: sympy
-Requires-Dist: functools
 Requires-Dist: xgboost
-Requires-Dist: sklearn
+Requires-Dist: scikit-learn
 Requires-Dist: shap
 Requires-Dist: scipy
-Requires-Dist: pickle
 Requires-Dist: astropy
-Requires-Dist: itertools
 Requires-Dist: latex2sympy2
 Dynamic: author
 Dynamic: classifier

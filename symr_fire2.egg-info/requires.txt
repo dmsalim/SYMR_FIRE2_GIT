@@ -4,12 +4,9 @@ pysr
 matplotlib
 seaborn
 sympy
-functools
 xgboost
-sklearn
+scikit-learn
 shap
 scipy
-pickle
 astropy
-itertools
 latex2sympy2

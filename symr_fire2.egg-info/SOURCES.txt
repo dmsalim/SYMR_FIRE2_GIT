@@ -1,0 +1,10 @@
+pyproject.toml
+setup.py
+functions/__init__.py
+functions/functions_run_pysr.py
+functions/functions_run_xgb_shap.py
+symr_fire2.egg-info/PKG-INFO
+symr_fire2.egg-info/SOURCES.txt
+symr_fire2.egg-info/dependency_links.txt
+symr_fire2.egg-info/requires.txt
+symr_fire2.egg-info/top_level.txt
