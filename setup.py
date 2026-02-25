@@ -14,7 +14,7 @@ setup(
         "sympy",
         "functools",
         "xgboost",
-        "sklearn",
+        "scikit-learn",
         "shap",
         "scipy",
         "pickle",
