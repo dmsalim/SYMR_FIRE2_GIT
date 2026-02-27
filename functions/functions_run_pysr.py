@@ -57,7 +57,7 @@ def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units
     default_files_path = "/SH_SCRIPTS/DEFAULT_FILES"
     folder_indices     = [i for i, x in enumerate(eqns_picklefile) if x == "/"]
     exp_name           = eqns_picklefile[folder_indices[-1]:eqns_picklefile.find(".")]
-    default_file = eqns_picklefile[:folder_indices[-2]]+default_files_path+exp_name+"_DEFAULT.csv"
+    default_file       = eqns_picklefile[:folder_indices[-2]]+default_files_path+exp_name+"_DEFAULT.csv"
     
     ######## MAKE LOSS TABLE ###########
     original_columns     = list((map(lambda n: n[1:-1], X_train.columns))) #CHANGE BACK TO X_train.columns for non-math column names
@@ -90,7 +90,7 @@ def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units
             batching                       = True,
             warm_start                     = True,
             batch_size                     = 256,
-            equation_file                  = default_file)
+            temp_equation_file             = default_file)
  
         model.loss_function = (
             """
