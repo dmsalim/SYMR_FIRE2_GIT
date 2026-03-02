@@ -27,7 +27,7 @@ from itertools import starmap
 from sympy import simplify, sympify, symbols, latex
 from latex2sympy2 import latex2sympy
 from .functions_run_xgb_shap import *
-import pdb
+#import pdb
 
 jl.seval(
     """
@@ -134,7 +134,6 @@ def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units
 
         # ---- get TRAINING loss -----
         model.fit(X_train.set_axis(temp_column_names, axis='columns'), y_train)
-        pdb.set_trace()
         train_full_losses_epoch       = np.expand_dims(model.equations_["loss"].to_numpy(), axis=0) 
         found_eqns_indices            = np.arange(train_full_losses_epoch.shape[1]).tolist() 
         train_MSE_metrics             = list(map(MSE_metrics_FUNC(X_train, y_train), found_eqns_indices))
