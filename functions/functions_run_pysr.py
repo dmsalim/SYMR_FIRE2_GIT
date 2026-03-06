@@ -202,7 +202,7 @@ def filter_top_eqns(model, X_train, max_loss, num_top_eqns=4):
     df_top_eqns = df_top_eqns.sort_values('complexity').reset_index(drop=True)
      
     model_complexity     = model.equations_["complexity"]
-    where_top_eqn        = np.in1d(model_complexity.values, df_top_eqns["complexity"].values)
+    where_top_eqn        = np.isin(model_complexity.values, df_top_eqns["complexity"].values)
     model_indices        = model.equations_.index[where_top_eqn]
     
     df_top_eqns.insert(loc=1, column='model_orig_index', value=model_indices)

@@ -27,6 +27,7 @@ from itertools import starmap
 from sympy import simplify, sympify, symbols, latex
 from latex2sympy2 import latex2sympy
 from .functions_run_xgb_shap import *
+#import pdb
 
 jl.seval(
     """
@@ -57,7 +58,7 @@ def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units
     default_files_path = "/SH_SCRIPTS/DEFAULT_FILES"
     folder_indices     = [i for i, x in enumerate(eqns_picklefile) if x == "/"]
     exp_name           = eqns_picklefile[folder_indices[-1]:eqns_picklefile.find(".")]
-    default_file = eqns_picklefile[:folder_indices[-2]]+default_files_path+exp_name+"_DEFAULT.csv"
+    default_file       = eqns_picklefile[:folder_indices[-2]]+default_files_path+exp_name+"_DEFAULT.csv"
     
     ######## MAKE LOSS TABLE ###########
     original_columns     = list((map(lambda n: n[1:-1], X_train.columns))) #CHANGE BACK TO X_train.columns for non-math column names
@@ -90,7 +91,7 @@ def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units
             batching                       = True,
             warm_start                     = True,
             batch_size                     = 256,
-            equation_file                  = default_file)
+            temp_equation_file             = default_file)
  
         model.loss_function = (
             """
@@ -201,7 +202,7 @@ def filter_top_eqns(model, X_train, max_loss, num_top_eqns=4):
     df_top_eqns = df_top_eqns.sort_values('complexity').reset_index(drop=True)
      
     model_complexity     = model.equations_["complexity"]
-    where_top_eqn        = np.in1d(model_complexity.values, df_top_eqns["complexity"].values)
+    where_top_eqn        = np.isin(model_complexity.values, df_top_eqns["complexity"].values)
     model_indices        = model.equations_.index[where_top_eqn]
     
     df_top_eqns.insert(loc=1, column='model_orig_index', value=model_indices)
