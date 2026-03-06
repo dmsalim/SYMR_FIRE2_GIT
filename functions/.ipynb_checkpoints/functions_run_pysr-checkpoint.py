@@ -306,7 +306,7 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
          
         # ---- plot top equations ---- #
         if not top_eqns_complexity.empty:
-            where_top_eqn = np.in1d(model_complexity.values, top_eqns_complexity.values)
+            where_top_eqn = np.isin(model_complexity.values, top_eqns_complexity.values)
             plot_top_eqns_x = top_eqns_complexity.sort_values()
             plot_top_eqns_y = metric_plot[where_top_eqn]
             for i, marker in enumerate(top_eqns_markers):
