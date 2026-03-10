@@ -17,6 +17,8 @@ import pickle
 from matplotlib.gridspec import GridSpec, GridSpecFromSubplotSpec
 from astropy import units as u, constants as const
 #def extract_data_for_analytic_models(df):
+from   .functions_run_pysr     import *
+from   .functions_run_xgb_shap import *
 
 def find_best_model(df, sfr_type):
     gas_mass    = np.array(df["GasNeutMass"])    * u.M_sun
@@ -147,59 +149,6 @@ def sfr_analytic_models_plot(df_analytic_sfr_models, X_test, y_XGBreg, test_feat
     min_sd_res       = perr_m_model_LIST[1:][where_min_sd_res]
     min_sd_res_model = df_analytic_sfr_models.keys()[2:][where_min_sd_res]
     return min_sd_res, min_sd_res_model
-
-
-def make_seperate_loss_curves(ax_FULL_loss_train, ax_FULL_loss_test, ax_QUANT_loss_train, ax_QUANT_loss_test, df_top_eqns, 
-                             df_train_FULL_loss_top_eqns,     df_test_FULL_loss_top_eqns,
-                             df_train_QUANTILE_loss_top_eqns, df_test_QUANTILE_loss_top_eqns,
-                             min_loss=None, max_loss=1, max_loss_model=None, is_right=True): 
-    
-    n_epochs     = df_train_FULL_loss_top_eqns.index[-1] + 1  
-    epochs_array = np.arange(n_epochs)+1
-    FULL_ylim     = [0.262, 0.32]
-    QUANT_ylim   = [0.00, 0.049]
-    ax_FULL_loss_train.set_ylim(FULL_ylim[0], FULL_ylim[1])
-    ax_FULL_loss_test.set_ylim(FULL_ylim[0], FULL_ylim[1])
-    ax_QUANT_loss_train.set_ylim(QUANT_ylim[0], QUANT_ylim[1])
-    ax_QUANT_loss_test.set_ylim(QUANT_ylim[0], QUANT_ylim[1])
-
-    if is_right==False:
-        ax_FULL_loss_train.set_ylabel("Full Loss (MSE + Quantile Loss)")
-        ax_QUANT_loss_train.set_ylabel("Quantile Loss")
-    else:
-        ax_FULL_loss_train.yaxis.set_tick_params(labelleft=False)
-        ax_QUANT_loss_train.yaxis.set_tick_params(labelleft=False)
-    ax_FULL_loss_test.yaxis.set_tick_params(labelleft=False)
-    ax_FULL_loss_test.xaxis.set_tick_params(labelbottom=False)
-    ax_QUANT_loss_test.yaxis.set_tick_params(labelleft=False)
-
-    ax_FULL_loss_train.axhline(y=max_loss, color='lightgray', linestyle='dashed', label=max_loss_model)
-    ax_FULL_loss_train.xaxis.set_tick_params(labelbottom=False)
-    ax_QUANT_loss_train.set_xlabel("Epochs")
-    ax_QUANT_loss_test.set_xlabel("Epochs")
-
-    if min_loss != None: 
-        ax_FULL_loss_test.axhline(y=min_loss, color='lightgray', linestyle='dashdot', label='XGBoost')
-
-    for n in range(len(df_top_eqns)):
-    #### ---- plot PySR found equation ---- ####
-        eqn_complexity   = int((df_top_eqns["complexity"])[n]) 
-        eqn_colour       = complexity_colour(n, num_top_eqns=len(df_top_eqns))
-        train_FULL_loss_array = np.array(df_train_FULL_loss_top_eqns[eqn_complexity]) 
-        test_FULL_loss_array  = np.array(df_test_FULL_loss_top_eqns[eqn_complexity])
-        
-        train_QUANTILE_loss_array = np.array(df_train_QUANTILE_loss_top_eqns[eqn_complexity]) 
-        test_QUANTILE_loss_array  = np.array(df_test_QUANTILE_loss_top_eqns[eqn_complexity])
-        
-        label = "complexity = "+str(eqn_complexity)
-            
-        ax_FULL_loss_train.plot(epochs_array, train_FULL_loss_array,     c=eqn_colour, label=label)
-        ax_FULL_loss_test.plot(epochs_array,  test_FULL_loss_array,      c=eqn_colour, label=label)
-        ax_QUANT_loss_train.plot(epochs_array, train_QUANTILE_loss_array, c=eqn_colour, label=label)#, linestyle="dashed")
-        ax_QUANT_loss_test.plot(epochs_array,  test_QUANTILE_loss_array,  c=eqn_colour, label=label)#, linestyle="dashed")
-
-    ax_FULL_loss_train.legend(loc="upper right", fontsize=10)
-
 
 def both_sfr_timescales_analysis_plots(eqns_save_obj_LIST, xbg_save_object_LIST, best_loss_LIST, best_model_LIST, sfr_title_LIST=None, min_sd_res_zip_LIST=None, num_top_eqns=6, savefile="FOUND_EQNS.pdf"): 
     n_cols = len(eqns_save_obj_LIST)
