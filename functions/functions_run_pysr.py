@@ -213,7 +213,7 @@ def filter_top_eqns(model, X_train, max_loss, num_top_eqns=4):
 #### ---------- FUNCTIONS TO CREATE ANALYSIS PLOTS OUT OF TRAINING RESULTS ---------- ####
 #### ================================================================================ ####
 
-def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test, y_test, r2_axes, used_markers, test_feature_temp_name ="x0", min_loss=None, max_r2=None, df_top_eqns=None, min_sd_res_zip=None, is_right=True, eqn_markers="G0"):
+def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test, y_test, r2_axes, used_markers, test_feature_temp_name ="x0", min_loss=None, max_r2=None, df_top_eqns=None, min_sd_res_zip=None, eqn_markers="G0"):
 
     latex_eqn_to_marker_FUNC = (latex_eqn_to_marker_G0 if eqn_markers == "G0" else latex_eqn_to_marker)
         
@@ -242,9 +242,11 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
     model_testplane_m, model_testplane_sd = map(np.array, zip(*model_testplane_m_sd))
 
     m_label           = "\mathrm{m}_{\mathrm{fit}}"
+    
     ylim_FUNC         = lambda arr: [np.nanmin(arr)-(np.nanmax(arr)-np.nanmin(arr))/10., np.nanmax(arr)+(np.nanmax(arr)-np.nanmin(arr))/10.]
     log_score         = np.where(np.isinf(np.log10(model_score)), np.nan, np.log10(model_score))
-    ylim_score        = [10**ylim_FUNC(log_score)[0], 1.]
+    ylim_score        =[10**ylim_FUNC(log_score)[0], np.float64(1.1)]
+    metric_yrange     =[ylim_score]
     
     metrics_list      = [model_score, model_r2,   model_fullloss,   model_testplane_m,        model_testplane_sd           ]
     metrics_standards = [None,        max_r2,     min_loss,         data_testplane_m,         data_testplane_sd            ]
@@ -253,7 +255,8 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
     metric_linestyle  = ["None",      "None",     "solid",          "None",                   "None"                       ]
    
     #metric_yrange     = [[5e-9, 5e0], [-1.5, 1.1], [0.1, 2.1],     [-0.1, 1.8],              [-0.001, 0.036]              ]
-    metric_yrange     = [ylim_score, list(map(ylim_FUNC, [model_r2, model_fullloss, model_testplane_m, model_testplane_sd]))]
+    metric_yrange.extend(map(ylim_FUNC, [model_r2, model_fullloss, model_testplane_m, model_testplane_sd]))
+    
     # ---- PLOT COMPLEXITY VS. LOSS & R^2 ---- #
 
     if not df_top_eqns.empty:
@@ -278,10 +281,10 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
         metric_plot = np.array(metrics_list[n])
         
         # ---- axes labes etc ---- #
-        if is_right==False:
-            ax_metric.set_ylabel(metrics_labels[n])
-        else:
-            ax_metric.yaxis.set_tick_params(labelleft=False)
+        #if is_right==False:
+        ax_metric.set_ylabel(metrics_labels[n])
+        #else:
+        #    ax_metric.yaxis.set_tick_params(labelleft=False)
         ax_metric.set_ylim(metric_yrange[n][0], metric_yrange[n][1]) 
         if metric_plottype[n] != None: 
             ax_metric.set_yscale(metric_plottype[n])
@@ -290,7 +293,7 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
         if n==3:
             ax_metric.axhline(1.4,  color='lightgrey', linestyle="dashdot", label="K98")
         if n==1:
-            label_r2 = "Perfect $R^2$" if (is_right==True) else None
+            label_r2 = "Perfect $R^2$" #if (is_right==True) else None
             ax_metric.axhline(1,    color='lightgrey', linestyle="dashdot", label=label_r2)
 
         if (n==4) & (min_sd_res_zip!=None):
@@ -313,7 +316,7 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
             plot_top_eqns_x = top_eqns_complexity.sort_values()
             plot_top_eqns_y = metric_plot[where_top_eqn]
             for i, marker in enumerate(top_eqns_markers):
-                label = "Selected top eqn" if (n==1 and i == len(top_eqns_markers)-1 and is_right==True) else None
+                label = "Selected top eqn" if (n==1 and i == len(top_eqns_markers)-1) else None
                 ax_metric.plot(plot_top_eqns_x[i], plot_top_eqns_y[i], marker=marker, c="orange", linestyle='None', label=label)
             df_top_eqns_metric[metrics_labels[n]] = metric_plot[where_top_eqn] 
             if (n>=3): 
@@ -327,7 +330,7 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
         
         # ---- lines for comparison ---- #
         if metrics_standards[n] != None: 
-            if (n==1) and (is_right==True):
+            if (n==1): #and (is_right==True):
                 label = "XGBoost $R^2$"
             else:
                 label = None
