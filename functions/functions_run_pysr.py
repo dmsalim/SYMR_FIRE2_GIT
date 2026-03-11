@@ -406,8 +406,8 @@ def make_seperate_loss_curves(ax_FULL_loss_train, ax_FULL_loss_test, ax_QUANT_lo
     
     n_epochs     = df_train_FULL_loss_top_eqns.index[-1] + 1  
     epochs_array = np.arange(n_epochs)+1
-    FULL_ylim     = [0.262, 0.32]
-    QUANT_ylim   = [0.00, 0.049]
+    FULL_ylim    = [np.nanmin(np.stack([df_train_FULL_loss_top_eqns.to_numpy(),    df_test_FULL_loss_top_eqns.to_numpy()]))    -0.1, np.nanmax(np.stack([df_train_FULL_loss_top_eqns.to_numpy(),    df_test_FULL_loss_top_eqns.to_numpy()])     +0.1]#[0.262, 0.32]
+    QUANT_ylim   = [np.nanmin(np.stack([df_train_QUANTILE_loss_top_eqns.to_numpy(),df_test_QUANTILE_loss_top_eqns.to_numpy()]))-0.1, np.nanmax(np.stack([df_train_QUANTILE_loss_top_eqns.to_numpy(),df_test_QUANTILE_loss_top_eqns.to_numpy()]))+0.1]#[0.00, 0.049]
     ax_FULL_loss_train.set_ylim(FULL_ylim[0], FULL_ylim[1])
     ax_FULL_loss_test.set_ylim(FULL_ylim[0], FULL_ylim[1])
     ax_QUANT_loss_train.set_ylim(QUANT_ylim[0], QUANT_ylim[1])
