@@ -320,8 +320,8 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
                 metric_res = metric_plot - metrics_standards[n]
                 residuals_top_eqns  = metric_res[where_top_eqn]# - metrics_standards[n]
 
-                pdb.set_trace()
-                where_top_eqn_iloc  = int(np.where(np.abs(residuals_top_eqns) == np.nanmin(np.abs(residuals_top_eqns)))[0])
+                #where_top_eqn_iloc  = int(np.where(np.abs(residuals_top_eqns) == np.nanmin(np.abs(residuals_top_eqns)))[0])
+                where_top_eqn_iloc = np.where(np.abs(residuals_top_eqns) == np.nanmin(np.abs(residuals_top_eqns)))[0][0]
                 min_res_eqn_comp    = df_top_eqns_metric["Complexity"].iloc[where_top_eqn_iloc]
                 best_eqn_metric     = df_top_eqns_metric[metrics_labels[n]].iloc[where_top_eqn_iloc]
                 ax_metric.plot(min_res_eqn_comp, best_eqn_metric,     marker = 'o', markeredgecolor="black", markerfacecolor="None", linestyle='None', label="Least residuals eqn")
