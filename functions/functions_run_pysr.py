@@ -450,7 +450,8 @@ def make_seperate_loss_curves(ax_FULL_loss_train, ax_FULL_loss_test, ax_QUANT_lo
         ax_QUANT_loss_train.plot(epochs_array, train_QUANTILE_loss_array, c=eqn_colour, label=label)#, linestyle="dashed")
         ax_QUANT_loss_test.plot(epochs_array,  test_QUANTILE_loss_array,  c=eqn_colour, label=label)#, linestyle="dashed")
 
-    ax_FULL_loss_train.legend(loc="upper right", fontsize=10)
+    ax_QUANT_loss_test.legend(ncol=2, loc="upper right", fontsize=10)
+    #ax_FULL_loss_train.legend(loc="upper right", fontsize=10)
 
 #### ========================================================================= ####
 #### ---------- FUNCTIONS TO CREATE PLOTS ANALYSING FOUND EQUATIONS ---------- ####
