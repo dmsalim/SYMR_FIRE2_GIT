@@ -245,7 +245,7 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
     
     ylim_FUNC         = lambda arr: [np.nanmin(arr)-(np.nanmax(arr)-np.nanmin(arr))/10., np.nanmax(arr)+(np.nanmax(arr)-np.nanmin(arr))/10.]
     log_score         = np.where(np.isinf(np.log10(model_score)), np.nan, np.log10(model_score))
-    ylim_score        =[10**ylim_FUNC(log_score)[0], np.float64(1.1)]
+    ylim_score        =[10**ylim_FUNC(log_score)[0], np.float64(1.2)]
     metric_yrange     =[ylim_score]
     
     metrics_list      = [model_score, model_r2,   model_fullloss,   model_testplane_m,        model_testplane_sd           ]
