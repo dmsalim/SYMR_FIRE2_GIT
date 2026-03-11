@@ -243,15 +243,17 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
 
     m_label           = "\mathrm{m}_{\mathrm{fit}}"
     ylim_FUNC         = lambda arr: [np.nanmin(arr)-(np.nanmax(arr)-np.nanmin(arr))/10., np.nanmax(arr)+(np.nanmax(arr)-np.nanmin(arr))/10.]
+    log_score         = np.where(np.isinf(np.log10(model_score)), np.nan, np.log10(model_score))
+    ylim_score        = [10**ylim_FUNC(log_score)[0], 1.]
     
-    metrics_list      = [model_score, model_r2,   model_fullloss,   model_testplane_m,        model_testplane_sd           ]#,            y_model_sd]
-    metrics_standards = [None,        max_r2,     min_loss,         data_testplane_m,         data_testplane_sd            ]#,             y_test_sd]
-    metrics_labels    = ["Score",     "$R^2$",    "Test Loss",      "$"+m_label+"$ in KS plane", "$\sigma_{\mathrm{KS, model}}$"]#, "$\mathrm{SD}_{"+y_label+"}$"]
-    metric_plottype   = ["log",       None,       None,             None,                     None                         ]#,                          None     ]
-    metric_linestyle  = ["None",      "None",     "solid",          "None",                   "None"                       ]#,                        "None"      ]
+    metrics_list      = [model_score, model_r2,   model_fullloss,   model_testplane_m,        model_testplane_sd           ]
+    metrics_standards = [None,        max_r2,     min_loss,         data_testplane_m,         data_testplane_sd            ]
+    metrics_labels    = ["Score",     "$R^2$",    "Test Loss",      "$"+m_label+"$ in KS plane", "$\sigma_{\mathrm{KS, model}}$"]
+    metric_plottype   = ["log",       None,       None,             None,                     None                         ]
+    metric_linestyle  = ["None",      "None",     "solid",          "None",                   "None"                       ]
    
-    #metric_yrange     = [[5e-9, 5e0], [-1.5, 1.1], [0.1, 2.1],     [-0.1, 1.8],              [-0.001, 0.036]              ]#,                [-0.05, 0.85]]
-    metric_yrange     = list(map(ylim_FUNC, [model_score, model_r2, model_fullloss, model_testplane_m, model_testplane_sd]))
+    #metric_yrange     = [[5e-9, 5e0], [-1.5, 1.1], [0.1, 2.1],     [-0.1, 1.8],              [-0.001, 0.036]              ]
+    metric_yrange     = [ylim_score, list(map(ylim_FUNC, [model_r2, model_fullloss, model_testplane_m, model_testplane_sd]))]
     # ---- PLOT COMPLEXITY VS. LOSS & R^2 ---- #
 
     if not df_top_eqns.empty:
