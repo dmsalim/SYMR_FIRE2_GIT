@@ -264,9 +264,9 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
         top_eqns_marker = list(top_eqns_markers)
         df_top_eqns_metric  = pd.DataFrame({"Complexity": top_eqns_complexity.sort_values()})
         df_top_eqns_metric["marker"] = top_eqns_markers
-    
-    for n, standard in enumerate(metrics_standards):
+
     #### ---- plot PySR found equation ---- ####
+    for n, standard in enumerate(metrics_standards):
         # ---- define dataset to plot ----#
         if (n<=1):
             ax_metric = ax_train_metrics[n]
@@ -290,14 +290,12 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
         if n==1:
             label_r2 = "Perfect $R^2$" if (is_right==True) else None
             ax_metric.axhline(1,    color='lightgrey', linestyle="dashdot", label=label_r2)
-        #if (n==1 or n==3) & (is_right==False):
-        #    ax_metric.legend(loc="lower right")
+
         if (n==4) & (min_sd_res_zip!=None):
             (min_sd_res, min_sd_res_model) = min_sd_res_zip
             ax_metric.axhline(min_sd_res, color='lightgrey', linestyle="dashdot", label=min_sd_res_model)
-               # ---- plot for all found equations ---- # 
         
-        #used_markers = set()
+        # ---- plot for all found equations ---- # 
         for i, (complexity, metric, mark) in enumerate(zip(model_complexity, metric_plot, model_marker)):
             label = model_label[i] if mark not in used_markers else None
             used_markers.add(mark)
@@ -320,7 +318,6 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
                 metric_res = metric_plot - metrics_standards[n]
                 residuals_top_eqns  = metric_res[where_top_eqn]# - metrics_standards[n]
 
-                #where_top_eqn_iloc  = int(np.where(np.abs(residuals_top_eqns) == np.nanmin(np.abs(residuals_top_eqns)))[0])
                 where_top_eqn_iloc = np.where(np.abs(residuals_top_eqns) == np.nanmin(np.abs(residuals_top_eqns)))[0][0]
                 min_res_eqn_comp    = df_top_eqns_metric["Complexity"].iloc[where_top_eqn_iloc]
                 best_eqn_metric     = df_top_eqns_metric[metrics_labels[n]].iloc[where_top_eqn_iloc]
@@ -328,22 +325,12 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
         
         # ---- lines for comparison ---- #
         if metrics_standards[n] != None: 
-        #    label = metrics_labels[n] 
             if (n==1) and (is_right==True):
                 label = "XGBoost $R^2$"
             else:
                 label = None
-            #if (n>=3): 
-               # label      = "FIRE test data"
-            #else: 
-                #label = None
             ax_metric.axhline(metrics_standards[n],  color='pink', linestyle="dashed", label=label) 
-        # Only add label argument if label is not None
-            #if label is not None:
-            #    ax_metric.axhline(metrics_standards[n], color='pink', linestyle="dashed", label=label)
-            #else:
-            #    ax_metric.axhline(metrics_standards[n], color='pink', linestyle="dashed")
-        
+
         # ---- x axes and legend ---- #
         if  (n==1) or (n == len(metrics_standards)-1): 
             ax_metric.set_xlabel("Equation Complexity")
