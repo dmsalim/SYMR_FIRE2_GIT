@@ -213,8 +213,10 @@ def filter_top_eqns(model, X_train, max_loss, num_top_eqns=4):
 #### ---------- FUNCTIONS TO CREATE ANALYSIS PLOTS OUT OF TRAINING RESULTS ---------- ####
 #### ================================================================================ ####
 
-def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test, y_test, r2_axes, used_markers, test_feature_temp_name ="x0", min_loss=None, max_r2=None, df_top_eqns=None, min_sd_res_zip=None, is_right=True):
-     
+def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test, y_test, r2_axes, used_markers, test_feature_temp_name ="x0", min_loss=None, max_r2=None, df_top_eqns=None, min_sd_res_zip=None, is_right=True, eqn_markers="G0"):
+
+    latex_eqn_to_marker_FUNC = (latex_eqn_to_marker_G0 if eqn_markers == "G0" else latex_eqn_to_marker)
+        
     # ---- EXTRACT DESIRED METRICS FROM MODEL ---- #
     model_complexity          = model.equations_["complexity"]
     model_score               = model.equations_["score"]
@@ -224,7 +226,7 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
     model_mseloss, model_r2   = map(np.array, zip(*model_metrics))
     model_fullloss            = list(map((lambda yt:   (lambda ym: full_custom_loss(yt, ym)))(np.squeeze(y_test.to_numpy())), y_model_trained_list))
     model_latex               = df_found_eqns["latex equation"]
-    latex_to_marker_results   = list(map(lambda e: latex_eqn_to_marker(e), model_latex.to_list()))
+    latex_to_marker_results   = list(map(lambda e: latex_eqn_to_marker_FUNC(e), model_latex.to_list()))
     model_label, model_marker = zip(*latex_to_marker_results)
     model_label               = list(model_label)
     model_marker              = list(model_marker)
@@ -239,22 +241,24 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
     data_testplane_m,  data_testplane_sd  = find_dispersion(X_test_feature.to_numpy(), np.squeeze(y_test.to_numpy()))
     model_testplane_m, model_testplane_sd = map(np.array, zip(*model_testplane_m_sd))
 
-    m_label = "\mathrm{m}_{\mathrm{fit}}"
-
+    m_label           = "\mathrm{m}_{\mathrm{fit}}"
+    ylim_FUNC         = lambda arr: [np.nanmin(arr)-(np.nanmax(arr)-np.nanmin(arr))/10., np.nanmax(arr)+(np.nanmax(arr)-np.nanmin(arr))/10.]
+    
     metrics_list      = [model_score, model_r2,   model_fullloss,   model_testplane_m,        model_testplane_sd           ]#,            y_model_sd]
     metrics_standards = [None,        max_r2,     min_loss,         data_testplane_m,         data_testplane_sd            ]#,             y_test_sd]
     metrics_labels    = ["Score",     "$R^2$",    "Test Loss",      "$"+m_label+"$ in KS plane", "$\sigma_{\mathrm{KS, model}}$"]#, "$\mathrm{SD}_{"+y_label+"}$"]
     metric_plottype   = ["log",       None,       None,             None,                     None                         ]#,                          None     ]
     metric_linestyle  = ["None",      "None",     "solid",          "None",                   "None"                       ]#,                        "None"      ]
    
-    metric_yrange     = [[5e-9, 5e0], [-1.5, 1.1], [0.1, 2.1],     [-0.1, 1.8],              [-0.001, 0.036]              ]#,                [-0.05, 0.85]]
+    #metric_yrange     = [[5e-9, 5e0], [-1.5, 1.1], [0.1, 2.1],     [-0.1, 1.8],              [-0.001, 0.036]              ]#,                [-0.05, 0.85]]
+    metric_yrange     = list(map(ylim_FUNC, [model_score, model_r2, model_fullloss, model_testplane_m, model_testplane_sd]))
     # ---- PLOT COMPLEXITY VS. LOSS & R^2 ---- #
 
     if not df_top_eqns.empty:
         top_eqns_complexity = df_top_eqns["complexity"]
         top_eqns_latex      = df_top_eqns["latex equation"] 
         
-        top_eqns_latex_to_marker_results = list(map(lambda e: latex_eqn_to_marker(e), top_eqns_latex.to_list()))
+        top_eqns_latex_to_marker_results = list(map(lambda e: latex_eqn_to_marker_FUNC(e), top_eqns_latex.to_list()))
         top_eqns_labels, top_eqns_markers = zip(*top_eqns_latex_to_marker_results)
         top_eqns_labels = list(top_eqns_labels)
         top_eqns_marker = list(top_eqns_markers)

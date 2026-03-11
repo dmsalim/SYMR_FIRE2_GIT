@@ -375,6 +375,31 @@ def latex_eqn_to_marker(latex_eqn):
                             label, marker = "Constant","X" # x (filled)
     return label, marker
 
+def latex_eqn_to_marker_G0(latex_eqn):
+    if ("\\log{t_{\\mathrm{ff}}}" in latex_eqn) and ("\\log{\\Phi}" in latex_eqn) and ("\\log{|v|}" in latex_eqn) and ("Z" in latex_eqn):
+        label, marker = "$\\log{t_{\\mathrm{ff}}}$, $\\log{\\Phi}$, $\\log{|v|} \\& $Z$ in eqn " , "p" #pentagon
+    else:
+        if ("\\log{t_{\\mathrm{ff}}}" in latex_eqn) and ("\\log{\\Phi}" in latex_eqn) and ("\\log{|v|}" in latex_eqn):
+            label, marker = "$\\log{t_{\\mathrm{ff}}}$, $\\log{\\Phi}$ \\& $\\log{|v|}$ in eqn", "s" #square
+        else: 
+            if ("\\log{n}" in latex_eqn) and ("\\log{\\Phi}" in latex_eqn) and ("Z" in latex_eqn):
+                label, marker = "$\\log{n}$, $\\log{\\Phi}$ \\& $Z$ in eqn", "D" #diamond
+            else: 
+                if ("\\log{n}" in latex_eqn) and ("\\log{\\Phi}" in latex_eqn):
+                    label, marker = "$\\log{n}$ \\& $\\log{\\Phi}$ in eqn" , "v" #triangle_down
+                else:
+                    if ("\\log{t_{\\mathrm{ff}}}" in latex_eqn) and ("\\log{\\Phi}" in latex_eqn):
+                        label, marker = "$\\log{t_{\\mathrm{ff}}}$ \\& $\\log{\\Phi}$ in eqn" , "^" #triangle_up
+                    else:
+                        if "\\log{t_{\\mathrm{ff}}}" in latex_eqn:
+                            label, marker = "$\\log{t_{\\mathrm{ff}}}$ only in eqn" , "o" #circle
+                        else:
+                            if "\\log{T}" in latex_eqn:
+                                label, marker = "$\\log{T}$ only in eqn", "*"
+                            else:
+                                label, marker = "Constant","X" # x (filled)
+    return label, marker
+
 def sfr_comparison_plots(ax, y_test_np, y_model, y_label, test_feature, complexity=None, model_eqn=None, model_name=None, log=False):
 
     if log == True:
