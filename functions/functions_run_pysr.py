@@ -27,7 +27,7 @@ from itertools import starmap
 from sympy import simplify, sympify, symbols, latex
 from latex2sympy2 import latex2sympy
 from .functions_run_xgb_shap import *
-#import pdb
+import pdb
 
 jl.seval(
     """
@@ -315,6 +315,8 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
             if (n>=3): 
                 metric_res = metric_plot - metrics_standards[n]
                 residuals_top_eqns  = metric_res[where_top_eqn]# - metrics_standards[n]
+
+                pdb.set_trace()
                 where_top_eqn_iloc  = int(np.where(np.abs(residuals_top_eqns) == np.nanmin(np.abs(residuals_top_eqns)))[0])
                 min_res_eqn_comp    = df_top_eqns_metric["Complexity"].iloc[where_top_eqn_iloc]
                 best_eqn_metric     = df_top_eqns_metric[metrics_labels[n]].iloc[where_top_eqn_iloc]
