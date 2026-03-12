@@ -24,7 +24,7 @@ from sklearn.model_selection import train_test_split
 from matplotlib.gridspec import GridSpec, GridSpecFromSubplotSpec
 from matplotlib.colors import ListedColormap
 from itertools import starmap
-from sympy import simplify, sympify, symbols, latex
+from sympy import simplify, sympify, symbols, latex, factor, factor_terms, powdenest, powsimp, exp, Float, Integer
 from latex2sympy2 import latex2sympy
 from .functions_run_xgb_shap import *
 import pdb
@@ -173,15 +173,18 @@ def round_expr(expr, num_decimal_places):
     return expr.xreplace({n: round(n, num_decimal_places) for n in expr.atoms(sympy.Float)})
 
 def make_df_found_eqns(model, var_strings, param_strings):
-    
-    replacements = list(zip(var_strings, param_strings))
 
-    
+    stabilize_expression_FUNC = lambda expr: powsimp(powdenest(factor_terms(factor(expr)), force=True), force=True).xreplace({Float(1.0): Integer(1)})
+    round_expr_FUNC           = lambda expr, n=3: expr.xreplace({a: Float(a, n) for a in expr.atoms(Float)})
+        
+    replacements  = list(zip(var_strings, param_strings))
     df_found_eqns = pd.DataFrame(model.equations_).drop(columns=["sympy_format", "lambda_format"])
     latex_column  = []
     for n in range(len(df_found_eqns.index)):
+        expr = model.equations_.sympy_format[n]
         #latex_eqn_var_str   = latex(simplify(model.equations_.sympy_format[n]).evalf(3)) #model.latex(index=n)
-        latex_eqn_var_str   = latex(round_expr(simplify(model.equations_.sympy_format[n]), 2))
+        #latex_eqn_var_str   = latex(round_expr(simplify(model.equations_.sympy_format[n]), 2))
+        latex_eqn_var_str   = latex(round_expr_FUNC(simplify(stabilize_expression_FUNC(expr))))
         latex_eqn_param_str = reduce(lambda a, kv: a.replace(*kv), replacements, latex_eqn_var_str)
         latex_column.append(latex_eqn_param_str)
     df_found_eqns.insert(loc=len(df_found_eqns.columns), column='latex equation', value=latex_column)
