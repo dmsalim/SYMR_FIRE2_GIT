@@ -302,6 +302,14 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
         if (n==4) & (min_sd_res_zip!=None):
             (min_sd_res, min_sd_res_model) = min_sd_res_zip
             ax_metric.axhline(min_sd_res, color='lightgrey', linestyle="dashdot", label=min_sd_res_model)
+                
+        # ---- lines for comparison ---- #
+        if metrics_standards[n] != None: 
+            if (n==1): #and (is_right==True):
+                label = "XGBoost $R^2$"
+            else:
+                label = None
+            ax_metric.axhline(metrics_standards[n],  color='pink', linestyle="dashed", label=label) 
         
         # ---- plot for all found equations ---- # 
         for i, (complexity, metric, mark) in enumerate(zip(model_complexity, metric_plot, model_marker)):
@@ -330,14 +338,6 @@ def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test,
                 min_res_eqn_comp    = df_top_eqns_metric["Complexity"].iloc[where_top_eqn_iloc]
                 best_eqn_metric     = df_top_eqns_metric[metrics_labels[n]].iloc[where_top_eqn_iloc]
                 ax_metric.plot(min_res_eqn_comp, best_eqn_metric,     marker = 'o', markeredgecolor="black", markerfacecolor="None", linestyle='None', label="Least residuals eqn")
-        
-        # ---- lines for comparison ---- #
-        if metrics_standards[n] != None: 
-            if (n==1): #and (is_right==True):
-                label = "XGBoost $R^2$"
-            else:
-                label = None
-            ax_metric.axhline(metrics_standards[n],  color='pink', linestyle="dashed", label=label) 
 
         # ---- x axes and legend ---- #
         if  (n==1) or (n == len(metrics_standards)-1): 

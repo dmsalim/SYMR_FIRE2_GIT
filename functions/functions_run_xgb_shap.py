@@ -70,6 +70,8 @@ def fixed_slope_calc_base_residuals(x_vals, y_vals, gradient):
 
 def find_dispersion(x_vals, y_vals):
     mask         = ~np.isnan(x_vals) & ~np.isnan(y_vals)
+    if mask.sum() < 2:
+        return np.nan, np.nan
     linfit_FUNC  = lambda x, m, c: m*x + c
     popt, pcov   = curve_fit(linfit_FUNC, x_vals[mask].tolist(), y_vals[mask].tolist())
           #popt  = Optimal values for the parameters [m, c] so that the sum of the squared residuals of f(xdata, *popt) - ydata is minimized.
@@ -377,7 +379,7 @@ def latex_eqn_to_marker(latex_eqn):
 
 def latex_eqn_to_marker_G0(latex_eqn):
     if ("\\log{t_{\\mathrm{ff}}}" in latex_eqn) and ("\\log{\\Phi}" in latex_eqn) and ("\\log{|v|}" in latex_eqn) and ("Z" in latex_eqn):
-        label, marker = "$\\log{t_{\\mathrm{ff}}}$, $\\log{\\Phi}$, $\\log{|v|} & $Z$ in eqn" , "p" #pentagon
+        label, marker = "$\\log{t_{\\mathrm{ff}}}$, $\\log{\\Phi}$, $\\log{|v|}$ & $Z$ in eqn" , "p" #pentagon
     else:
         if ("\\log{t_{\\mathrm{ff}}}" in latex_eqn) and ("\\log{\\Phi}" in latex_eqn) and ("\\log{|v|}" in latex_eqn):
             label, marker = "$\\log{t_{\\mathrm{ff}}}$, $\\log{\\Phi}$ & $\\log{|v|}$ in eqn", "s" #square
@@ -400,16 +402,14 @@ def latex_eqn_to_marker_G0(latex_eqn):
                                 label, marker = "Constant","X" # x (filled)
     return label, marker
 
-def sfr_comparison_plots(ax, y_test_np, y_model, y_label, test_feature, complexity=None, model_eqn=None, model_name=None, log=False):
+def sfr_comparison_plots(ax, y_test_np, y_model, y_label, test_feature, complexity=None, model_eqn=None, model_name=None, test_mode=False, scatter=False): 
 
-    if log == True:
-        y_test_np    = np.log10(y_test_np)
-        y_model      = np.log10(y_model)
-        y_label      = "log" + y_label
-        where_finite = np.where(np.isfinite(y_test_np) & np.isfinite(y_model))
-        y_test_np    = y_test_np[where_finite]
-        y_model      = y_model[where_finite]    
-     
+    if test_mode == True:
+        rng  = np.random.default_rng()
+        mask = np.zeros(len(y_test_np), dtype=bool)
+        mask[rng.choice(len(y_test_np), 1000, replace=False)] = True
+        y_test_np, y_model = [arr[mask] for arr in [y_test_np, y_model]]
+        
     n_levels  = 4
     
     model_LOSS, model_R2 = r2_loss_calc(y_test_np, y_model)
@@ -423,7 +423,8 @@ def sfr_comparison_plots(ax, y_test_np, y_model, y_label, test_feature, complexi
     ax.text(0.06, 0.6, r"$R^2=$%.{0}f".format(3)%model_R2,     transform=ax.transAxes) 
     
     if model_eqn != None:
-        ax.text(0.06, 0.85, "$\log\Sigma_{\mathrm{SFR}}$ = " + model_eqn, fontsize = 9, fontweight ="bold", bbox=dict(facecolor='bisque'), transform=ax.transAxes)#, alpha=0.4))
+        #ax.text(0.06, 0.85, "$\log\Sigma_{\mathrm{SFR}}$ = " + model_eqn, fontsize = 9, fontweight ="bold", bbox=dict(facecolor='bisque'), transform=ax.transAxes)#, alpha=0.4))
+        ax.text(0.06, 0.85, r"$" + y_label + "$ = " + model_eqn, fontsize = 9, fontweight ="bold", bbox=dict(facecolor='bisque'), transform=ax.transAxes)#, alpha=0.4))
     elif model_name != None:
         ax.text(0.06, 0.85, model_name, fontsize = 9, fontweight ="bold", bbox=dict(facecolor='bisque'), transform=ax.transAxes)#, alpha=0.4))
     z      = np.array(test_feature)
