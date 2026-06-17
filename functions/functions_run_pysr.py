@@ -53,7 +53,7 @@ def save_into_final_loss_df(full_losses_epoch, MSE_losses_epoch, df_losses_all_e
     df_losses_all_eqns_all_epochs = pd.concat([df_losses_all_eqns_all_epochs, df_losses_this_epoch], ignore_index=True)
     return df_losses_all_eqns_all_epochs
 
-def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units=None, n_epochs=10, n_saves=1, eqns_picklefile="FOUND_EQNS.pickle", eqns_picklefile_old=None):
+def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units=None, n_epochs=10, n_saves=1, eqns_picklefile="FOUND_EQNS.pickle", eqns_picklefile_old=None, weights=None):
 
     default_files_path = "/SH_SCRIPTS/DEFAULT_FILES"
     folder_indices     = [i for i, x in enumerate(eqns_picklefile) if x == "/"]
@@ -133,12 +133,12 @@ def train_pysr_save_loss(X_train, X_test, y_train, y_test, X_units=None, y_units
         MSE_metrics_FUNC   = (lambda t, m: (lambda X, y: (lambda i: r2_loss_calc(np.squeeze(np.array(y)),     m.predict(X.set_axis(t, axis='columns'), index=i)))))(temp_column_names, model) 
 
         # ---- get TRAINING loss -----
-        model.fit(X_train.set_axis(temp_column_names, axis='columns'), y_train)
+        model.fit(X_train.set_axis(temp_column_names, axis='columns'), y_train, weights=weights)
         train_full_losses_epoch       = np.expand_dims(model.equations_["loss"].to_numpy(), axis=0) 
         found_eqns_indices            = np.arange(train_full_losses_epoch.shape[1]).tolist() 
         train_MSE_metrics             = list(map(MSE_metrics_FUNC(X_train, y_train), found_eqns_indices))
         train_MSE_losses_epoch , _    = map(lambda a: np.expand_dims(np.array(a), axis=0), zip(*train_MSE_metrics)) 
-        
+      
         # ---- get TEST loss -----
         test_full_losses_epoch   = np.expand_dims(np.array(list(map(full_loss_FUNC(X_test, y_test),   found_eqns_indices))), axis=0)
         test_MSE_metrics         = list(map(MSE_metrics_FUNC(X_test, y_test), found_eqns_indices))
@@ -219,6 +219,7 @@ def filter_top_eqns(model, X_train, max_loss, num_top_eqns=4):
 def plot_complexity_vs_r2(ax_train_metrics, ax_sd, model, df_found_eqns, X_test, y_test, r2_axes, used_markers, test_feature_temp_name ="x0", min_loss=None, max_r2=None, df_top_eqns=None, min_sd_res_zip=None, eqn_markers="G0"):
 
     latex_eqn_to_marker_FUNC = (latex_eqn_to_marker_G0 if eqn_markers == "G0" else latex_eqn_to_marker)
+    latex_eqn_to_marker_FUNC.__defaults__[0].clear()  # reset cache for this plot call
         
     # ---- EXTRACT DESIRED METRICS FROM MODEL ---- #
     model_complexity          = model.equations_["complexity"]

@@ -29,6 +29,8 @@ from itertools import starmap
 from sympy import simplify, sympify, symbols, latex
 from latex2sympy2 import latex2sympy
 
+import pdb
+
 #### ============================================================ ####
 #### ---------- FUNCTIONS TO CALCULATE DATA STATISTICS ---------- ####
 #### ============================================================ ####
@@ -377,7 +379,7 @@ def latex_eqn_to_marker(latex_eqn):
                             label, marker = "Constant","X" # x (filled)
     return label, marker
 
-def latex_eqn_to_marker_G0(latex_eqn):
+def latex_eqn_to_marker_G0_old(latex_eqn):
     if ("\\log{t_{\\mathrm{ff}}}" in latex_eqn) and ("\\log{\\Phi}" in latex_eqn) and ("\\log{|v|}" in latex_eqn) and ("Z" in latex_eqn):
         label, marker = "$\\log{t_{\\mathrm{ff}}}$, $\\log{\\Phi}$, $\\log{|v|}$ & $Z$ in eqn" , "p" #pentagon
     else:
@@ -401,6 +403,35 @@ def latex_eqn_to_marker_G0(latex_eqn):
                             else:
                                 label, marker = "Constant","X" # x (filled)
     return label, marker
+
+def latex_eqn_to_marker_G0(latex_eqn, _cache={}):
+    var_definitions = [(v, f'${v}$') for v in [r'\log{n}',                              r'\log{t_{\mathrm{ff}}}',              r'\log{\mathrm{SFR}_{40\mathrm{Myr}}}',
+                                               r'\log{\mathrm{sSFR}_{40\mathrm{Myr}}}', r'\log{T}',                            r'\log{\Phi}',
+                                               r'\log{\|\nabla \mathbf{v}\|}',          r'\log{\|\nabla \times \mathbf{v}\|}', r'\log{\|\mathcal{E}\|}',
+                                               r'Z',                                    r'x_\mathrm{e}',                       r'\nabla \cdot \mathbf{v}']]
+    MARKER_POOL = ['o', 's', 'D', '^', 'v', 'p', '*', 'h', 'H', '<', '>', '8', 'P']
+
+    var_set = frozenset(display for search, display in var_definitions if search in latex_eqn)
+    if var_set in _cache:
+        return _cache[var_set]
+
+    if len(var_set) == 0:
+        label, marker = "Constant", "X"
+    elif len(var_set) == 1:
+        label  = list(var_set)[0] + " only in eqn"
+        marker = MARKER_POOL[len(_cache) % len(MARKER_POOL)]
+    else:
+        label  = ', '.join(sorted(var_set)) + ' in eqn'
+        marker = MARKER_POOL[len(_cache) % len(MARKER_POOL)]
+
+    _cache[var_set] = (label, marker)
+    #pdb.set_trace()
+    return label, marker
+
+#def reset_marker_assignments():
+#    """Call this between experiments to clear marker state."""
+#    var_set_to_marker.clear()
+
 
 def sfr_comparison_plots(ax, y_test_np, y_model, y_label, test_feature, complexity=None, model_eqn=None, model_name=None, test_mode=False, scatter=False): 
 
